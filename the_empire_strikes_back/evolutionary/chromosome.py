@@ -4,3 +4,6 @@ class Chromosome:
 
     def generate(self):
         pass
+
+    def get_weights(self):
+        return self.weights

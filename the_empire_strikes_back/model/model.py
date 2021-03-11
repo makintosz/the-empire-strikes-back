@@ -48,7 +48,7 @@ class ConvolutedModelWrapper:
             metrics=['accuracy']
         )
 
-    def make_predictions(self, x: np.ndarray):
+    def make_predictions(self, x: np.ndarray) -> np.ndarray:
         return self.model.predict(x)
 
     def get_weights(self):

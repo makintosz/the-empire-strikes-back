@@ -1,5 +1,5 @@
 MODEL_ARCHITECTURE = {
-    'input_shape': [50, 100, 2],
+    'input_shape': [48, 96, 2],
 
     'l1_filters': 64,
     'l1_size': 5,

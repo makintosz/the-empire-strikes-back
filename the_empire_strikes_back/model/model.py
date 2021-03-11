@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
+from tensorflow.keras import initializers
 
 from the_empire_strikes_back.config.model import MODEL_ARCHITECTURE
 
@@ -18,12 +19,44 @@ class ConvolutedModelWrapper:
                 MODEL_ARCHITECTURE['l1_size'],
                 activation=MODEL_ARCHITECTURE['l1_activation'],
                 padding=MODEL_ARCHITECTURE['l1_padding'],
-                input_shape=MODEL_ARCHITECTURE['input_shape']
+                input_shape=MODEL_ARCHITECTURE['input_shape'],
             )
+        )
+        self.model.add(
+            keras.layers.MaxPooling2D(
+                MODEL_ARCHITECTURE['l2_pooling'],
+            )
+        )
+        self.model.add(
+            keras.layers.Flatten()
+        )
+        self.model.add(
+            keras.layers.Dense(
+                MODEL_ARCHITECTURE['l3_dense'],
+                activation=MODEL_ARCHITECTURE['l3_activation'],
+            )
+        )
+        self.model.add(
+            keras.layers.Dense(
+                MODEL_ARCHITECTURE['l4_dense'],
+                activation=MODEL_ARCHITECTURE['l4_activation'],
+            )
+        )
+        self.model.compile(
+            loss='binary_crossentropy',
+            optimizer='sgd',
+            metrics=['accuracy']
         )
 
     def make_predictions(self, x: np.ndarray):
-        pass
+        return self.model.predict(x)
 
     def get_weights(self):
         return self.model.get_weights()
+
+    def set_weights(self):
+        new_weights = []
+        for w in self.model.get_weights():
+            new_weights.append(w*0.332)
+
+        self.model.set_weights(new_weights)

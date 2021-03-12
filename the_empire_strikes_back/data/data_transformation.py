@@ -21,6 +21,7 @@ def load_transform_save() -> None:
         filename = make_filename(MARKET, timeframe)
         data_tf[timeframe] = pd.read_parquet(f'data/{filename}')[:2500]
 
+    prices = np.zeros((len(data_tf[TIMEFRAMES[0]])-SEQUENCE_WIDTH*12, 3))
     data = np.zeros(
         (
             len(data_tf[TIMEFRAMES[0]])-SEQUENCE_WIDTH*12,
@@ -39,28 +40,24 @@ def load_transform_save() -> None:
                 2,
             )
         )
+        prices_row = data_tf[TIMEFRAMES[0]].iloc[i, :]
         data_frame_first_tf = data_tf[TIMEFRAMES[0]].iloc[
             i - SEQUENCE_WIDTH:i, :
         ]
         converted_frame_first_tf = convert_frame(data_frame_first_tf)
         data_sequences[:, :, 0] = converted_frame_first_tf
-        '''
-        plt.plot(data_frame_first_tf['l'])
-        plt.plot(data_frame_first_tf['h'])
-        plt.show()
-        plt.imshow(converted_frame_first_tf)
-        plt.show()
-        '''
         last_date = data_tf[TIMEFRAMES[0]]['datetime'].iloc[i]
         df_second_tf = data_tf[TIMEFRAMES[1]][
             data_tf[TIMEFRAMES[1]]['datetime'] < last_date
-            ]
+        ]
         df_second_tf = df_second_tf.iloc[-SEQUENCE_WIDTH:, :]
         converted_frame_second_tf = convert_frame(df_second_tf)
         data_sequences[:, :, 1] = converted_frame_second_tf
         data[idx] = data_sequences
+        prices[idx] = prices_row[['h', 'l', 'c']].values
 
     np.save('data/data.npy', data)
+    np.save('data/prices.npy', prices)
 
 
 def convert_frame(

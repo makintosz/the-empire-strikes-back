@@ -14,3 +14,5 @@ MODEL_ARCHITECTURE = {
     'l4_dense': 1,
     'l4_activation': 'sigmoid'
 }
+
+PRED_THRESHOLD = 0.5

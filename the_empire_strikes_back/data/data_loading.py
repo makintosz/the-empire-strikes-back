@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import numpy as np
 
 from the_empire_strikes_back.data.data_transformation import (
@@ -6,10 +8,11 @@ from the_empire_strikes_back.data.data_transformation import (
 from the_empire_strikes_back.config.general import TRANSFORM_DATA
 
 
-def load_data() -> np.ndarray:
+def load_data() -> Tuple[np.ndarray, np.ndarray]:
     """ Returns dict with loaded dataframes. """
     if TRANSFORM_DATA:
         load_transform_save()
 
     data = np.load('data/data.npy')
-    return data
+    data_prices = np.load('data/prices.npy')
+    return data, data_prices

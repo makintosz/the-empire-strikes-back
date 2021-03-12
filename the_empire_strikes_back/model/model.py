@@ -48,7 +48,6 @@ class ConvolutedModelWrapper:
             optimizer='sgd',
             metrics=['accuracy']
         )
-        print(self.model.summary())
 
     def make_predictions(self, x: np.ndarray) -> np.ndarray:
         return self.model.predict(x)

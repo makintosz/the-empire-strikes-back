@@ -1,7 +1,8 @@
+from typing import List
+
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras import initializers
 
 from the_empire_strikes_back.config.model import MODEL_ARCHITECTURE
 
@@ -47,6 +48,7 @@ class ConvolutedModelWrapper:
             optimizer='sgd',
             metrics=['accuracy']
         )
+        print(self.model.summary())
 
     def make_predictions(self, x: np.ndarray) -> np.ndarray:
         return self.model.predict(x)
@@ -54,9 +56,6 @@ class ConvolutedModelWrapper:
     def get_weights(self):
         return self.model.get_weights()
 
-    def set_weights(self):
-        new_weights = []
-        for w in self.model.get_weights():
-            new_weights.append(w*0.332)
-
-        self.model.set_weights(new_weights)
+    def set_weights(self, weights: List[np.ndarray]):
+        """ Sets new weights from a chromosome. """
+        self.model.set_weights(weights)

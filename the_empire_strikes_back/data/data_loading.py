@@ -1,10 +1,9 @@
 import numpy as np
 
-from the_empire_strikes_back.data.data_transformation import load_transform_save
-from the_empire_strikes_back.config.general import TRANSFORM_DATA
-from the_empire_strikes_back.config.fitness import (
-    TIMEFRAMES,
+from the_empire_strikes_back.data.data_transformation import (
+    load_transform_save
 )
+from the_empire_strikes_back.config.general import TRANSFORM_DATA
 
 
 def load_data() -> np.ndarray:

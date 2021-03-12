@@ -8,7 +8,7 @@ MODEL_ARCHITECTURE = {
 
     'l2_pooling': 2,
 
-    'l3_dense': 128,
+    'l3_dense': 64,
     'l3_activation': 'relu',
     
     'l4_dense': 1,

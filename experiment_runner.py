@@ -5,10 +5,4 @@ from the_empire_strikes_back.evolutionary.chromosome import Chromosome
 from fitness_function.fitness_function import FitnessFunction
 
 
-data, prices = load_data()
-chromosome = Chromosome()
-model = ConvolutedModelWrapper()
-model.initialise()
-chromosome.generate(model.get_weights())
-
 evolve()

@@ -1,7 +1,6 @@
 from typing import List
 
 import numpy as np
-import tensorflow as tf
 from tensorflow import keras
 
 from the_empire_strikes_back.config.model import MODEL_ARCHITECTURE
@@ -12,7 +11,8 @@ class ConvolutedModelWrapper:
     def __init__(self):
         self.model = None
 
-    def initialise(self):
+    def initialise(self) -> None:
+        """ Creates tensorflow model and initializes. """
         self.model = keras.models.Sequential()
         self.model.add(
             keras.layers.Conv2D(
@@ -57,6 +57,6 @@ class ConvolutedModelWrapper:
         """ Returns weights of the model. """
         return self.model.get_weights()
 
-    def set_weights(self, weights: List[np.ndarray]):
+    def set_weights(self, weights: List[np.ndarray]) -> None:
         """ Sets new weights from a chromosome. """
         self.model.set_weights(weights)

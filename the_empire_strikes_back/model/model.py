@@ -50,9 +50,11 @@ class ConvolutedModelWrapper:
         )
 
     def make_predictions(self, x: np.ndarray) -> np.ndarray:
+        """ Makes predictions on given data. """
         return self.model.predict(x)
 
-    def get_weights(self):
+    def get_weights(self) -> List[np.ndarray]:
+        """ Returns weights of the model. """
         return self.model.get_weights()
 
     def set_weights(self, weights: List[np.ndarray]):

@@ -9,10 +9,22 @@ from the_empire_strikes_back.config.general import TRANSFORM_DATA
 
 
 def load_data() -> Tuple[np.ndarray, np.ndarray]:
-    """ Returns dict with loaded dataframes. """
+    """ Returns data for training. """
     if TRANSFORM_DATA:
-        load_transform_save()
+        load_transform_save('train')
 
-    data = np.load('data/data.npy')
-    data_prices = np.load('data/prices.npy')
+    data = np.load('data/data_train.npy')
+    data_prices = np.load('data/prices_train.npy')
+
+    return data, data_prices
+
+
+def load_test_data() -> Tuple[np.ndarray, np.ndarray]:
+    """ Returns data for testing. """
+    if TRANSFORM_DATA:
+        load_transform_save('test')
+
+    data = np.load('data/data_test.npy')
+    data_prices = np.load('data/prices_test.npy')
+
     return data, data_prices

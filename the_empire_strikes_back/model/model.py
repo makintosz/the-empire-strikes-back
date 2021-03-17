@@ -1,3 +1,4 @@
+import time
 from typing import List
 
 import numpy as np
@@ -10,6 +11,10 @@ class ConvolutedModelWrapper:
     """ Class with CNN model and it's interface. """
     def __init__(self):
         self.model = None
+
+    def print_summary(self):
+        """ Prints summary of the model. """
+        self.model.summary()
 
     def initialise(self) -> None:
         """ Creates tensorflow model and initializes. """
@@ -51,7 +56,10 @@ class ConvolutedModelWrapper:
 
     def make_predictions(self, x: np.ndarray) -> np.ndarray:
         """ Makes predictions on given data. """
-        return self.model.predict(x)
+        #start = time.time()
+        predictions = self.model.predict(x)
+        #print("Predict calculation: " + str(time.time() - start))
+        return predictions
 
     def get_weights(self) -> List[np.ndarray]:
         """ Returns weights of the model. """

@@ -3,7 +3,9 @@ from copy import deepcopy
 
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
+import matplotlib.pyplot as plt
 
+from fitness_function.fitness_function import FitnessFunction
 from the_empire_strikes_back.evolutionary.chromosome import Chromosome
 from the_empire_strikes_back.model.model import ConvolutedModelWrapper
 from the_empire_strikes_back.config.evolutionary import (
@@ -26,9 +28,28 @@ def generate_population() -> List[Chromosome]:
     return population
 
 
+def calculate_fitness(
+    model: ConvolutedModelWrapper,
+    fitness: FitnessFunction,
+    population: List[Chromosome]
+) -> Tuple[list, List[Chromosome]]:
+    """ Calculates fitness of entire population. Regenerates chromosome when
+    zero transactions. """
+    population_fitness = []
+    for chromosome in population:
+        profit, counter, _, __ = fitness.calculate(chromosome, 'train')
+        while counter == 0:
+            chromosome.generate(model.get_weights())
+            profit, counter, _, __ = fitness.calculate(chromosome, 'train')
+
+        population_fitness.append(profit)
+
+    return population_fitness, population
+
+
 def select_chromosomes(
-    population_fitness,
-    population
+    population_fitness: list,
+    population: List[Chromosome]
 ) -> List[Chromosome]:
     """ Selects chromosomes to the next population based on roullet
      selection of its fitness results. """
@@ -144,3 +165,12 @@ def is_even(seq: list) -> int:
         return 1
     else:
         return 0
+
+
+def show_plots(mean: list, best: list) -> None:
+    """ Shows plots of training process for evolutionary optimisation. """
+    plt.Figure(figsize=(18, 9))
+    plt.plot(mean)
+    plt.plot(best)
+    plt.grid()
+    plt.show()

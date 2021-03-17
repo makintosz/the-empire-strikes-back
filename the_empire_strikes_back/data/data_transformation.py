@@ -2,7 +2,6 @@ from bisect import bisect
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 from the_empire_strikes_back.config.fitness import (
     MARKET,
@@ -14,12 +13,16 @@ from the_empire_strikes_back.config.general import (
 )
 
 
-def load_transform_save() -> None:
+def load_transform_save(data_type: str) -> None:
     """ Transforms data into sequences and saves numpy arrays in files. """
     data_tf = {}
-    for timeframe in TIMEFRAMES:
-        filename = make_filename(MARKET, timeframe)
-        data_tf[timeframe] = pd.read_parquet(f'data/{filename}')[:2500]
+    for tf in TIMEFRAMES:
+        filename = make_filename(MARKET, tf)
+        if data_type == 'train':
+            data_tf[tf] = pd.read_parquet(f'data/{filename}')[:50_000]
+
+        elif data_type == 'test':
+            data_tf[tf] = pd.read_parquet(f'data/{filename}')[50_000:65_000]
 
     prices = np.zeros((len(data_tf[TIMEFRAMES[0]])-SEQUENCE_WIDTH*12, 3))
     data = np.zeros(
@@ -33,13 +36,7 @@ def load_transform_save() -> None:
     for idx, i in enumerate(
             range(SEQUENCE_WIDTH*12, len(data_tf[TIMEFRAMES[0]]))
     ):
-        data_sequences = np.zeros(
-            (
-                SEQUENCE_HEIGHT,
-                SEQUENCE_WIDTH,
-                2,
-            )
-        )
+        data_sequences = np.zeros((SEQUENCE_HEIGHT, SEQUENCE_WIDTH, 2))
         prices_row = data_tf[TIMEFRAMES[0]].iloc[i, :]
         data_frame_first_tf = data_tf[TIMEFRAMES[0]].iloc[
             i - SEQUENCE_WIDTH:i, :
@@ -56,8 +53,9 @@ def load_transform_save() -> None:
         data[idx] = data_sequences
         prices[idx] = prices_row[['h', 'l', 'c']].values
 
-    np.save('data/data.npy', data)
-    np.save('data/prices.npy', prices)
+    data = data.astype(np.int8)
+    np.save(f'data/data_{data_type}.npy', data)
+    np.save(f'data/prices_{data_type}.npy', prices)
 
 
 def convert_frame(
@@ -85,8 +83,7 @@ def find_position(
     data_frame: pd.core.frame.DataFrame,
     price: float
 ) -> int:
-    """ Finds position of price in frame for given number of
-    bisections. """
+    """ Finds position of price in frame for given number of bisections. """
     min_price = data_frame['l'].min()
     max_price = data_frame['h'].max()
     segment = (max_price - min_price) / SEQUENCE_HEIGHT

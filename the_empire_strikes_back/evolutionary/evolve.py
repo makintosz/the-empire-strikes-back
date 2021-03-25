@@ -11,7 +11,8 @@ from the_empire_strikes_back.evolutionary.evo_utils import (
     mutate_population,
     crossover_population,
     calculate_fitness,
-    show_plots
+    show_plots,
+    check_if_same_elements
 )
 from the_empire_strikes_back.evolutionary.chromosome import Chromosome
 from the_empire_strikes_back.config.evolutionary import (

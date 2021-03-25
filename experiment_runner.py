@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import tensorflow as tf
 
 from the_empire_strikes_back.evolutionary.evolve import evolve
 from fitness_function.fitness_function import FitnessFunction
@@ -6,15 +7,21 @@ from the_empire_strikes_back.evolutionary.chromosome import Chromosome
 from the_empire_strikes_back.model.model import ConvolutedModelWrapper
 
 
+gpus = tf.config.experimental.list_physical_devices('GPU')
+for gpu in gpus:
+    tf.config.experimental.set_memory_growth(gpu, True)
+
 fitness = FitnessFunction()
-'''
+
+"""
 model = ConvolutedModelWrapper()
 model.initialise()
 chromosome = Chromosome()
 chromosome.generate(model.get_weights())
-fitness.save_signals_plots(chromosome, 'train')
-fitness.save_signals_plots(chromosome, 'test')
-'''
+profit, amount, ratio, equity = fitness.calculate(chromosome, 'train')
+exit()
+"""
+
 best_chromosome = evolve()
 
 profit_train, amount_train, ratio_train, equity = fitness.calculate(best_chromosome, 'train')

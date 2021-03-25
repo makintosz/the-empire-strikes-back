@@ -1,18 +1,25 @@
 MODEL_ARCHITECTURE = {
     'input_shape': [48, 96, 2],
 
-    'l1_filters': 8,
+    'l1_filters': 32,
     'l1_size': 5,
     'l1_activation': 'relu',
-    'l1_padding': 'same',
+    'l1_padding': 'valid',
 
     'l2_pooling': 2,
 
-    'l3_dense': 8,
+    'l3_filters': 16,
+    'l3_size': 5,
     'l3_activation': 'relu',
+    'l3_padding': 'valid',
+
+    'l4_pooling': 2,
+
+    'l5_dense': 8,
+    'l5_activation': 'relu',
     
-    'l4_dense': 1,
-    'l4_activation': 'sigmoid'
+    'l6_dense': 1,
+    'l6_activation': 'sigmoid'
 }
 
-PRED_THRESHOLD = 0.5
+PRED_THRESHOLD = 0.4

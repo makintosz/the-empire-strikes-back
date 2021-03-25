@@ -41,8 +41,23 @@ def calculate_fitness(
         while counter == 0:
             chromosome.generate(model.get_weights())
             profit, counter, _, __ = fitness.calculate(chromosome, 'train')
+            print(profit)
+            print(counter)
 
         population_fitness.append(profit)
+
+    if check_if_same_elements(population_fitness):
+        print('Taka sama populacja. Reset populacji.')
+        print(population_fitness)
+        population_fitness = []
+        population = generate_population()
+        for chromosome in population:
+            profit, counter, _, __ = fitness.calculate(chromosome, 'train')
+            while counter == 0:
+                chromosome.generate(model.get_weights())
+                profit, counter, _, __ = fitness.calculate(chromosome, 'train')
+
+            population_fitness.append(profit)
 
     return population_fitness, population
 
@@ -174,3 +189,11 @@ def show_plots(mean: list, best: list) -> None:
     plt.plot(best)
     plt.grid()
     plt.show()
+
+
+def check_if_same_elements(population: list) -> bool:
+    """ Checks if all elements in a list have the same value. """
+    if len(set(population)) == 1:
+        return True
+    else:
+        return False

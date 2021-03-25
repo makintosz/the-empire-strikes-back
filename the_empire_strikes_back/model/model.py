@@ -1,3 +1,4 @@
+import gc
 import time
 from typing import List
 
@@ -34,18 +35,31 @@ class ConvolutedModelWrapper:
             )
         )
         self.model.add(
+            keras.layers.Conv2D(
+                MODEL_ARCHITECTURE['l3_filters'],
+                MODEL_ARCHITECTURE['l3_size'],
+                activation=MODEL_ARCHITECTURE['l3_activation'],
+                padding=MODEL_ARCHITECTURE['l3_padding'],
+            )
+        )
+        self.model.add(
+            keras.layers.MaxPooling2D(
+                MODEL_ARCHITECTURE['l4_pooling'],
+            )
+        )
+        self.model.add(
             keras.layers.Flatten()
         )
         self.model.add(
             keras.layers.Dense(
-                MODEL_ARCHITECTURE['l3_dense'],
-                activation=MODEL_ARCHITECTURE['l3_activation'],
+                MODEL_ARCHITECTURE['l5_dense'],
+                activation=MODEL_ARCHITECTURE['l5_activation'],
             )
         )
         self.model.add(
             keras.layers.Dense(
-                MODEL_ARCHITECTURE['l4_dense'],
-                activation=MODEL_ARCHITECTURE['l4_activation'],
+                MODEL_ARCHITECTURE['l6_dense'],
+                activation=MODEL_ARCHITECTURE['l6_activation'],
             )
         )
         self.model.compile(
@@ -56,9 +70,11 @@ class ConvolutedModelWrapper:
 
     def make_predictions(self, x: np.ndarray) -> np.ndarray:
         """ Makes predictions on given data. """
-        #start = time.time()
+        start = time.time()
         predictions = self.model.predict(x)
-        #print("Predict calculation: " + str(time.time() - start))
+        print("Predict calculation: " + str(time.time() - start))
+        keras.backend.clear_session()
+        gc.collect()
         return predictions
 
     def get_weights(self) -> List[np.ndarray]:

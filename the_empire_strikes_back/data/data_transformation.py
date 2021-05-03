@@ -19,10 +19,10 @@ def load_transform_save(data_type: str) -> None:
     for tf in TIMEFRAMES:
         filename = make_filename(MARKET, tf)
         if data_type == 'train':
-            data_tf[tf] = pd.read_parquet(f'data/{filename}')[:50_000]
+            data_tf[tf] = pd.read_parquet(f'data/{filename}')[:150_000]
 
         elif data_type == 'test':
-            data_tf[tf] = pd.read_parquet(f'data/{filename}')[50_000:65_000]
+            data_tf[tf] = pd.read_parquet(f'data/{filename}')[150_000:165_000]
 
     prices = np.zeros((len(data_tf[TIMEFRAMES[0]])-SEQUENCE_WIDTH*12, 3))
     data = np.zeros(

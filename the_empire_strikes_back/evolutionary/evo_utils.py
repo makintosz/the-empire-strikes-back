@@ -38,6 +38,8 @@ def calculate_fitness(
     population_fitness = []
     for chromosome in population:
         profit, counter, _, __ = fitness.calculate(chromosome, 'train')
+        print(profit)
+        print(counter)
         while counter == 0:
             chromosome.generate(model.get_weights())
             profit, counter, _, __ = fitness.calculate(chromosome, 'train')

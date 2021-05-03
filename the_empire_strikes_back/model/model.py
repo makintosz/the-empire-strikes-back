@@ -62,6 +62,12 @@ class ConvolutedModelWrapper:
                 activation=MODEL_ARCHITECTURE['l6_activation'],
             )
         )
+        self.model.add(
+            keras.layers.Dense(
+                MODEL_ARCHITECTURE['l7_dense'],
+                activation=MODEL_ARCHITECTURE['l7_activation'],
+            )
+        )
         self.model.compile(
             loss='binary_crossentropy',
             optimizer='sgd',
